@@ -12,6 +12,8 @@ if [[ ! -f ~/.ansible.cfg ]]; then
   exit 1
 fi
 
+tmpfile="/tmp/"`basename $0 | sed 's/.sh/.tmp/g'`
+
 inventory=`cat ~/.ansible.cfg \
   | grep 'inventory' \
   | awk -F'=' '{print $2}' \
@@ -22,10 +24,13 @@ if [[ ! -f ${inventory} ]]; then
   exit 1
 fi
 
+rm -f ${tmpfile}
 echo "Updating ${inventory} file..."
 for host in `cat ${inventory} | grep -v '\['`; do
 
     host=`echo ${host} | sed "s/#//g"`
+    [[ -n `grep "^${host}$" ${tmpfile}` ]] && continue
+
     ping -qc1 -W1 ${host} > /dev/null
     if [[ $? != 0 ]]; then
       echo -e "# ${host} \e[31m[offline]\e[0m"
@@ -34,8 +39,12 @@ for host in `cat ${inventory} | grep -v '\['`; do
       echo -e "${host} \e[92m[online]\e[0m"
       sed -i "s/^#${host}$/${host}/g" ${inventory}
     fi
+
+    echo ${host} >> ${tmpfile}
     
 done
+
+rm -f ${tmpfile}
 
 exit 0
 
