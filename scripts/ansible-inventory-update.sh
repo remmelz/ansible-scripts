@@ -29,7 +29,9 @@ echo "Updating ${inventory} file..."
 for host in `cat ${inventory} | grep -v '\['`; do
 
     host=`echo ${host} | sed "s/#//g"`
-    [[ -n `grep "^${host}$" ${tmpfile}` ]] && continue
+    if [[ -f ${tmpfile} ]]; then
+      [[ -n `grep "^${host}$" ${tmpfile}` ]] && continue
+    fi
 
     ping -qc1 -W1 ${host} > /dev/null
     if [[ $? != 0 ]]; then
