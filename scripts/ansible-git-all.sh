@@ -4,7 +4,7 @@ action=$1
 
 [[ -z $1 ]] && exit 1
 
-cd ~
+cd /ansible/roles
 
 for dir in `ls -1d *`; do
   [[ ! -d ./${dir}/.git ]] && continue
