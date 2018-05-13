@@ -1,12 +1,13 @@
 #!/bin/bash
 
+tmpfile="/var/tmp/remmelz.yml"
 github="https://github.com/remmelz"
 repo=$1
 
 if [[ -z ${repo} ]]; then
 
   echo
-  echo "Usage: $0 <repo>"
+  echo "Usage: $0 <repo> (--download-only)"
   echo
   echo "Repository list"
   echo "---------------"
@@ -35,14 +36,14 @@ else
   git pull
 fi
 
-echo "  - name: ${repo}" > ./run.yml
-echo "    hosts: all"   >> ./run.yml
-echo "    roles:"       >> ./run.yml
-echo "      - ${repo}"  >> ./run.yml
+[[ $2 == "--download-only" ]] && exit 1
 
-ansible-playbook -c local \
-  -i '127.0.0.1,' ./run.yml
+echo "  - name: ${repo}" > ${tmpfile}
+echo "    hosts: all"   >> ${tmpfile}
+echo "    roles:"       >> ${tmpfile}
+echo "      - ${repo}"  >> ${tmpfile}
 
-rm -f ./run.yml
+ansible-playbook -c local -i '127.0.0.1,' ${tmpfile}
+
+rm -f ${tmpfile}
 exit 0
-
