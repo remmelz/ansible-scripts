@@ -1,8 +1,8 @@
 #!/bin/bash
 
+repo=$1
 tmpfile="/var/tmp/remmelz.yml"
 github="https://github.com/remmelz"
-repo=$1
 
 if [[ -z ${repo} ]]; then
 
@@ -22,9 +22,14 @@ if [[ -z ${repo} ]]; then
 fi
 
 rpm -q ansible >> /dev/null
-[[ $? != 0 ]] && zypper -n in ansible
-rpm -q git >> /dev/null
-[[ $? != 0 ]] && zypper -n in git
+if [[ $? != 0 ]]; then
+
+  which zypper >> /dev/null
+  [[ $? == 0 ]] && zypper -n install ansible git
+  
+  which yum >> /dev/null
+  [[ $? == 0 ]] && yum -y install ansible git
+fi
 
 cd /etc/ansible/roles || exit 1
 
