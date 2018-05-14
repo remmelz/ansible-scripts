@@ -10,6 +10,7 @@ newvm=$2
 user="root"
 hypervisor="192.168.1.100"
 inventory="/ansible/inventory/hosts"
+logfile="/var/log/virtclone.log"
 boot_wait=25
 
 alive_before="/var/tmp/hosts.alive.before"
@@ -42,6 +43,7 @@ echo "[done]"
 ipaddr=`diff ${alive_before} ${alive_after} | tail -1 | awk -F' ' '{print $2}'`
 ssh ${user}@${hypervisor} "virsh desc ${newvm} ip=${ipaddr}"
 echo "New host ipaddress: ${ipaddr}"
+echo "${newvm}:${ipaddr}" >> ${logfile}
 
 exit 0
 
