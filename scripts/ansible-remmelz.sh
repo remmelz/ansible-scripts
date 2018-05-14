@@ -35,11 +35,10 @@ cd /etc/ansible/roles || exit 1
 
 if [[ ! -d ${repo} ]]; then
   git clone ${github}/${repo}.git
-  cd ${repo} || exit 1
-else
-  cd ${repo} || exit 1
-  git pull
 fi
+
+cd ${repo} || exit 1
+git pull
 
 [[ $2 == "--download-only" ]] && exit 1
 
