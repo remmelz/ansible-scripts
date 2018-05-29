@@ -31,6 +31,7 @@ if [[ $? != 0 ]]; then
   [[ $? == 0 ]] && yum -y install ansible git
 fi
 
+[[ ! -d /etc/ansible/roles ]] && mkdir -p /etc/ansible/roles
 cd /etc/ansible/roles || exit 1
 
 if [[ ! -d ${repo} ]]; then
