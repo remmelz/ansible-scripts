@@ -11,7 +11,7 @@ user="root"
 hypervisor="192.168.1.100"
 inventory="/ansible/inventory/hosts"
 logfile="/var/log/virtclone.log"
-boot_wait=25
+boot_wait=35
 
 alive_before="/var/tmp/hosts.alive.before"
 alive_after="/var/tmp/hosts.alive.after"
