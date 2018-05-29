@@ -43,7 +43,7 @@ echo "[done]"
 ipaddr=`diff ${alive_before} ${alive_after} | tail -1 | awk -F' ' '{print $2}'`
 ssh ${user}@${hypervisor} "virsh desc ${newvm} ip=${ipaddr}"
 echo "New host ipaddress: ${ipaddr}"
-echo "`date` ${newvm}:${ipaddr}" >> ${logfile}
+echo "`date` ${newvm} ${ipaddr}" >> ${logfile}
 
 exit 0
 
